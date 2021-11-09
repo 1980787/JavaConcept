@@ -6,8 +6,10 @@ public class PrimeNum {
         } else {
             System.out.println(testNum1 + " is not a prime number.");
         }
-    }
 
+    }
+    // convert java 8+
+    // using stream
     static boolean isPrime(int num) {
         if (num <= 1) {
             return false;

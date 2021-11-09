@@ -4,14 +4,17 @@ import java.util.Locale;
 public class Anagram {
     // dad, add
     public static void main(String[] args) {
-        char[] str1 = ("Dad").toLowerCase().toCharArray();
-        char[] str2 = ("Add").toLowerCase().toCharArray();
+        char[] str1 = ("Fried").toLowerCase().toCharArray();
+        char[] str2 = ("Fired").toLowerCase().toCharArray();
 
         if (areAnagram(str1, str2)) {
             System.out.println(Arrays.toString(str1) + " and " + Arrays.toString(str2) + " are anagram.");
         } else {
             System.out.println(Arrays.toString(str1) + " and " + Arrays.toString(str2) + " are not anagram.");
         }
+        DBConnector db1 = DBConnector.getDbConnector();
+        DBConnector db2 = DBConnector.getDbConnector();
+        System.out.println(db1.equals(db2));
     }
 
     static boolean areAnagram(char[] str1, char[] str2) {
