@@ -1,9 +1,19 @@
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class PracticeStream {
     public static void main(String[] args) {
+        // Functional Interface in java.util.function
+        // java.lang.Runnable
+        // Supplier<T>
+        // Consumer<T>
+        // Function<T, R> regular function. Take one param, return a result
+        // BiFunction<T, U, R> Take two param, return a result
+        // Predicate<T> condition. Take one param, return a boolean type result
+        // BiPredicate<T, U> Take two param, return a boolean type result
+
         // Collection Framework
         // Stream, List, Set, Queue, Dequeue
         List<Integer> list = Arrays.asList(1,2,3,4,5);
@@ -103,11 +113,100 @@ public class PracticeStream {
         // mapToObj()
         // IntStream -> Stream<String>
         IntStream obj = new Random().ints(5, 1, 36);
-        obj.mapToObj(i -> i + ", ").forEach(System.out::print); // 28, 13, 21, 5, 5,
+//        obj.mapToObj(i -> i + ", ").forEach(System.out::print); // 28, 13, 21, 5, 5,
         // peek(), flatMap()
 
-        // final operation
-        // forEach(), forEAchOrdered(), count(), max(), min(), findAny(), findFirst(),
-        // allMatch(), anyMatch(), noneMatch(), toArray(), reduce(), collect()
+        // Optional<T> Generic wrapper Class contain any type of reference variables.
+        // easy to check and handle null values
+        // OptionalInt, OptionalLong, OptionalDouble
+
+        // final operations
+        // Print: forEach(), forEachOrdered()
+        // non-primitive data type statistics: count(), max(), min() -> recommend to use primitive type stream
+        // Check condition: allMatch(), anyMatch(), noneMatch() - required Predicate parameter, return boolean
+        //                  findAny(), findFirst() - return Optional<T> type
+        // allMatch() satisfy all elements
+        IntStream allMatch = IntStream.rangeClosed(1,  10);
+        IntStream allMatch2 = IntStream.of(2, 4, 6, 8, 10);
+//        System.out.println(allMatch.allMatch(i -> i % 2 == 0)); // false, 1, 3, 5, 7, 9 is not matched
+//        System.out.println(allMatch2.allMatch(i -> i % 2 == 0)); // true, 2, 4, 6, 8, 10 is all matched
+        // anyMatch() satisfy anyone of elements
+//        System.out.println(allMatch.anyMatch(i -> i % 2 == 0)); // true, 2, 4, 6, 8,10 matched
+        // nonMatch() not satisfy all elements
+//        System.out.println(allMatch.noneMatch(i -> i > 100)); // true, all elements is less than 100, so all elements are not matched the condition.
+        // reduce() calculate by decreasing the elements of the stream one by one
+        // reduce(BinaryOperator<T> accumulator) return Optional<T>
+        // reduce(T identity, BinaryOperator<T> accumulator) return T
+        // reduce(U identity, BiFunction<U, T, U>, BinaryOperator<T> combiner) return U - parallel stream
+        // identity that starting number
+        IntStream reduce = IntStream.rangeClosed(1, 10);
+//        System.out.println(reduce.reduce((a, b) -> a > b ? a : b)); // OptionalInt[10] - get max value
+//        System.out.println(reduce.reduce((a, b) -> a > b ? a : b).getAsInt());  // 10
+//        System.out.println(reduce.reduce(Integer::max)); // OptionalInt[10] using static max method in Integer Class
+//        System.out.println(reduce.reduce(0, (a, b) -> a + 1)); // 10 - get count
+//        System.out.println(count(0, reduce)); // 10
+//        System.out.println(reduce.reduce(0, (a, b) -> a + b)); // 55  - get sum
+//        System.out.println(sum(0, reduce)); // 55
+        // toArray() returns all elements of a stream as an array
+//        System.out.println(Arrays.toString(reduce.toArray()));
+        // collect() required Collector parameter
+        // Used to collect elements of a stream and return the result of grouping or splitting into a collection.
+        // Collector is an interface
+        // Collectors is a class that provide written static method
+        Stream<Person> people = Stream.of(
+                new Person ("John", "William", 33),
+                new Person ("Jane", "Louis",  21),
+                new Person ("David", "London", 18)
+        );
+//        people.map(Person::getfName).forEach(System.out::print); // JohnJaneDavid
+//        people.map(Person::getlName).forEach(System.out::print); // WilliamLouisLondon
+//        people.map(Person::getAge).forEach(System.out::print); // 332118
+        // toList(), toSet(), toArray() with Collectors
+        // toMap(), toCollection() with Collectors
+//        List<String> firstName = people.map(Person::getfName).collect(Collectors.toList());
+//        System.out.println(firstName); // [John, Jane, David]
+        Person[] lastName = people.toArray(Person[]::new);
+//        System.out.println(lastName); // [LPracticeStream$Person;@59a6e353
+//        System.out.println(Arrays.toString(lastName)); // [PracticeStream$Person@59a6e353, PracticeStream$Person@7a0ac6e3, PracticeStream$Person@71be98f5]
+
     }
+    // Figuring out reduce() of final operations
+    static int count (int identity, IntStream stream) {
+        int a = identity;
+        for (int b  : stream.toArray()) {
+            a =  a + 1;
+        }
+        return a;
+    }
+    // Figuring out reduce() of final operations
+    static int sum (int identity, IntStream stream) {
+        int a = identity;
+        for (int b  : stream.toArray()) {
+            a =  a + b;
+        }
+        return a;
+    }
+    // Figuring out
+    // map() of intermediate operations
+    // collect() of final operations
+    static class Person {
+        private String fName;
+        private String lName;
+        private int age;
+
+        Person(String fName, String lName, int age) {
+            this.fName = fName;
+            this.lName = lName;
+            this.age = age;
+        }
+        String getfName() {
+            return fName;
+        }
+        String getlName() {
+            return lName;
+        }
+        int getAge() {
+            return age;
+        }
+     }
 }
