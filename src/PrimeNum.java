@@ -13,7 +13,7 @@ public class PrimeNum {
     // convert java 8+
     // using stream
     static boolean isPrime(int num) {
-        // Java 7
+        // Prior to Java 8
 //        if (num <= 1) {
 //            return false;
 //        }

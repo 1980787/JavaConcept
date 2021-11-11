@@ -32,6 +32,7 @@ public class PracticeStream {
         Stream emptyStream = Stream.empty();
 //        emptyStream.forEach(System.out::print); //
 
+
         // Primitive data type Stream
         // int, long, double
         int[] intArr = {1, 2, 3, 4, 5};
@@ -77,136 +78,33 @@ public class PracticeStream {
         IntStream landomIntStream4 = new Random().ints(5, -100, 10); // finite stream
 //        landomIntStream4.forEach(System.out::println); // print 5 random number that bound -100 <= r < 10
 
-        // Intermediate operation
-        // distinct, filter, limit, skip, sorted, map, peek, flatMap
-        // distinct() remove duplicate
-        IntStream distinct = IntStream.of(1, 2, 2, 3, 3, 3, 4, 5, 5, 6); // 1 - 10
-//        distinct.distinct().forEach(System.out::print); // 123456
-        // filter() remove not match condition. use multiply
-        IntStream filter = IntStream.rangeClosed(1, 10); // 1 - 10
-//        filter.filter(i -> i % 2 == 0).forEach(System.out::print); // 246810
-//        filter.filter(i -> i % 2 == 0 && i % 3 != 0).forEach(System.out::print); // 24810
-//        filter.filter(i -> i % 2 == 0).filter(i -> i % 3 != 0).forEach(System.out::print); // 24810
-        // limit() limit the number of result
-        // skip() skip as input value
-        IntStream skipNlimit = IntStream.rangeClosed(1, 10); // 1 - 10
-//        skipNlimit.skip(3).limit(5).forEach(System.out::print); // 45678
-        // sorted() sort as Comparator
-        // thenComparing() add sort condition
-        Stream<String> sort = Stream.of("dd", "aaa", "CC", "cc", "b");
-//        sort.sorted().forEach(System.out::print); // CCaaabccdd - natural
-//        sort.sorted(Comparator.reverseOrder()).forEach(System.out::print); // ddccbaaaCC - reverse
-//        sort.sorted(String.CASE_INSENSITIVE_ORDER).forEach(System.out::print); // aaabCCccdd - case insensitive
-//        sort.sorted(String.CASE_INSENSITIVE_ORDER.reversed()).forEach(System.out::print); // ddCCccbaaa - case insensitive and reverse
-//        sort.sorted(Comparator.comparing(String::length)).forEach(System.out::print); // bddCCccaaa - length of string
-//        sort.sorted(Comparator.comparing(String::length).reversed()).forEach(System.out::print); // aaaddCCccb - length of string and reverse
-        // map() converting stream elements
-        Stream<String> strMap = Stream.of("a", "b", "c", "d");
-//        strMap.map(String::toUpperCase).forEach(System.out::print); // ABCD
-        // mapToInt(), mapToLong(), mapToDouble() with parseInt(), valueOf()
-        // Stream<String> -> IntStream
-        Stream<String> str2Map = Stream.of("1", "2", "3", "4");
-//        str2Map.mapToInt(Integer::parseInt).forEach(System.out::print); // 1234
-        // Stream<Integer> -> IntStream
-        Stream<Integer> intMap = Stream.of(1, 2, 3, 4, 5);
-//        intMap.mapToInt(Integer::intValue).forEach(System.out::print); // 12345
-        // mapToObj()
-        // IntStream -> Stream<String>
-        IntStream obj = new Random().ints(5, 1, 36);
-//        obj.mapToObj(i -> i + ", ").forEach(System.out::print); // 28, 13, 21, 5, 5,
-        // peek(), flatMap()
+        // IntSummaryStatistics class in java.lang.Object - java.util.IntSummaryStatistics
+        // perform multiple mathematical terminal operations consume the elements of stream
+        // terminal operations can use at once.
+        // provide methods: getCount(), getSum(), getAverage(), getMin(), getMax()
+        Stream<Person> people = Stream.of(
+                new Person("John", "William", 33),
+                new Person("Jane", "Louis",  21),
+                new Person("David", "London", 18)
+        );
+        IntSummaryStatistics stats = people.mapToInt(Person::getAge).summaryStatistics();
+        System.out.println("count = " + stats.getCount());
+        System.out.println("sum = " + stats.getSum());
+        System.out.println("avg = " + stats.getAverage());
+        System.out.println("min = " + stats.getMin());
+        System.out.println("max = "  + stats.getMax());
+        /*
+        Above the code works at same time and print these
+            count = 3
+            sum = 72
+            avg = 24.0
+            min = 18
+            max = 33
+         */
 
         // Optional<T> Generic wrapper Class contain any type of reference variables.
         // easy to check and handle null values
         // OptionalInt, OptionalLong, OptionalDouble
-
-        // final operations
-        // Print: forEach(), forEachOrdered()
-        // non-primitive data type statistics: count(), max(), min() -> recommend to use primitive type stream
-        // Check condition: allMatch(), anyMatch(), noneMatch() - required Predicate parameter, return boolean
-        //                  findAny(), findFirst() - return Optional<T> type
-        // allMatch() satisfy all elements
-        IntStream allMatch = IntStream.rangeClosed(1,  10);
-        IntStream allMatch2 = IntStream.of(2, 4, 6, 8, 10);
-//        System.out.println(allMatch.allMatch(i -> i % 2 == 0)); // false, 1, 3, 5, 7, 9 is not matched
-//        System.out.println(allMatch2.allMatch(i -> i % 2 == 0)); // true, 2, 4, 6, 8, 10 is all matched
-        // anyMatch() satisfy anyone of elements
-//        System.out.println(allMatch.anyMatch(i -> i % 2 == 0)); // true, 2, 4, 6, 8,10 matched
-        // nonMatch() not satisfy all elements
-//        System.out.println(allMatch.noneMatch(i -> i > 100)); // true, all elements is less than 100, so all elements are not matched the condition.
-        // reduce() calculate by decreasing the elements of the stream one by one
-        // reduce(BinaryOperator<T> accumulator) return Optional<T>
-        // reduce(T identity, BinaryOperator<T> accumulator) return T
-        // reduce(U identity, BiFunction<U, T, U>, BinaryOperator<T> combiner) return U - parallel stream
-        // identity that starting number
-        IntStream reduce = IntStream.rangeClosed(1, 10);
-//        System.out.println(reduce.reduce((a, b) -> a > b ? a : b)); // OptionalInt[10] - get max value
-//        System.out.println(reduce.reduce((a, b) -> a > b ? a : b).getAsInt());  // 10
-//        System.out.println(reduce.reduce(Integer::max)); // OptionalInt[10] using static max method in Integer Class
-//        System.out.println(reduce.reduce(0, (a, b) -> a + 1)); // 10 - get count
-//        System.out.println(count(0, reduce)); // 10
-//        System.out.println(reduce.reduce(0, (a, b) -> a + b)); // 55  - get sum
-//        System.out.println(sum(0, reduce)); // 55
-        // toArray() returns all elements of a stream as an array
-//        System.out.println(Arrays.toString(reduce.toArray()));
-        // collect() required Collector parameter
-        // Used to collect elements of a stream and return the result of grouping or splitting into a collection.
-        // Collector is an interface
-        // Collectors is a class that provide written static method
-        Stream<Person> people = Stream.of(
-                new Person ("John", "William", 33),
-                new Person ("Jane", "Louis",  21),
-                new Person ("David", "London", 18)
-        );
-//        people.map(Person::getfName).forEach(System.out::print); // JohnJaneDavid
-//        people.map(Person::getlName).forEach(System.out::print); // WilliamLouisLondon
-//        people.map(Person::getAge).forEach(System.out::print); // 332118
-        // toList(), toSet(), toArray() with Collectors
-        // toMap(), toCollection() with Collectors
-//        List<String> firstName = people.map(Person::getfName).collect(Collectors.toList());
-//        System.out.println(firstName); // [John, Jane, David]
-        Person[] lastName = people.toArray(Person[]::new);
-//        System.out.println(lastName); // [LPracticeStream$Person;@59a6e353
-//        System.out.println(Arrays.toString(lastName)); // [PracticeStream$Person@59a6e353, PracticeStream$Person@7a0ac6e3, PracticeStream$Person@71be98f5]
-
     }
-    // Figuring out reduce() of final operations
-    static int count (int identity, IntStream stream) {
-        int a = identity;
-        for (int b  : stream.toArray()) {
-            a =  a + 1;
-        }
-        return a;
-    }
-    // Figuring out reduce() of final operations
-    static int sum (int identity, IntStream stream) {
-        int a = identity;
-        for (int b  : stream.toArray()) {
-            a =  a + b;
-        }
-        return a;
-    }
-    // Figuring out
-    // map() of intermediate operations
-    // collect() of final operations
-    static class Person {
-        private String fName;
-        private String lName;
-        private int age;
 
-        Person(String fName, String lName, int age) {
-            this.fName = fName;
-            this.lName = lName;
-            this.age = age;
-        }
-        String getfName() {
-            return fName;
-        }
-        String getlName() {
-            return lName;
-        }
-        int getAge() {
-            return age;
-        }
-     }
 }

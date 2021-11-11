@@ -3,7 +3,7 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-
+// AmigosCode
 public class StreamDemo {
     public static void main(String[] args) {
         List<Person> people = List.of(
