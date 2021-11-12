@@ -1,9 +1,8 @@
-import java.util.Comparator;
-import java.util.IntSummaryStatistics;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.*;
 
 public class CollectOfTerminalOps {
@@ -17,7 +16,9 @@ public class CollectOfTerminalOps {
         Stream<Person> people = Stream.of(
                 new Person("John", "William", 33),
                 new Person("Jane", "Louis",  21),
-                new Person("David", "London", 18)
+                new Person("David", "London", 18),
+                new Person("Sara", "Smith", 16),
+                new Person("Susan", "Brown", 21)
         );
 //        List<String> firstName = people.map(Person::getfName).collect(Collectors.toList());
 ////        System.out.println(firstName); // [John, Jane, David]
@@ -83,8 +84,35 @@ public class CollectOfTerminalOps {
 //        String firstNames3 = people.map(Person::getfName).collect(joining(", ","[","]"));
 //        System.out.println(firstNames3); // [John, Jane, David]
 
-        // partitioningBy() classify as Predicate of stream elements
+        // partitioningBy() dividing stream's elements as Predicate
+        // basic partition
+//        Map<Boolean, List<Person>> partitionAge = people.collect(partitioningBy(element -> element.getAge() < 21));
+//        List<Person> underAge = partitionAge.get(true);
+//        System.out.println(underAge); // [Person: fName=David, lName=London, age=18, Person: fName=Sara, lName=Smith, age=16]
+//        List<Person> adult = partitionAge.get(false);
+//        System.out.println(adult); // [Person: fName=John, lName=William, age=33, Person: fName=Jane, lName=Louis, age=21]
+        // partition + statistics
+//        Map<Boolean, Long> personNumByAge = people.collect(partitioningBy(elements -> elements.getAge() < 21, counting()));
+//        System.out.println("The number of underage people = " + personNumByAge.get(true)); // The number of underage people = 2
+//        System.out.println("The number of adult people = " + personNumByAge.get(false)); // The number of adult people = 2
+        Map<Boolean, Optional<Person>> oldestPerson = people.collect(
+                partitioningBy(elements -> elements.getAge() < 21, maxBy(comparingInt(Person::getAge)))
+                ); // need to figure out data type
+        System.out.println("oldest in underage: " + oldestPerson.get(true)); // oldest in under age: Optional[Person: fName=David, lName=London, age=18]
+        System.out.println("oldest in adult: " + oldestPerson.get(false)); // oldest in adult: Optional[Person: fName=John, lName=William, age=33]
+
         // groupingBy() classify as Function of stream elements
+//        Map<Integer, List<Person>> group = people.collect(groupingBy(Person::getAge));
+//        Set<Map.Entry<Integer, List<Person>>> entrySet = group.entrySet();
+//        for (Map.Entry<Integer, List<Person>> entry : entrySet) {
+//            System.out.println(entry.getKey() + " = " + entry.getValue());
+//        }
+        /*
+        16 = [Person: fName=Sara, lName=Smith, age=16]
+        33 = [Person: fName=John, lName=William, age=33]
+        18 = [Person: fName=David, lName=London, age=18]
+        21 = [Person: fName=Jane, lName=Louis, age=21, Person: fName=Susan, lName=Brown, age=21]
+         */
 
     }
 }
