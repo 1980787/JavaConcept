@@ -1,26 +1,27 @@
 public class Palindrome {
     public static void main(String[] args) {
-        String str = "aba";
+        String str = "abcd";
         System.out.println(str.length()/2);
         System.out.println(isPalindrome(str));
     }
 
     static boolean isPalindrome(String words) {
         // two pointer
+        int start = 0;
         int end = words.length() -1;
         boolean result = false;
+
         if (words.length() == 1) {
-            result = true;
+            return true;
         }
-        for(int i = 0; i < words.length() /2; i++) {
-            if (i < end) {
-                if (words.charAt(i) == words.charAt(end)) {
-                    result = true;
-                } else {
-                    result = false;
-                }
-                end--;
+        while (start < end) {
+            if (words.charAt(start) == words.charAt(end)) {
+                result = true;
+            } else {
+                result = false;
             }
+            start++;
+            end--;
         }
         return result;
     }
