@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Scanner;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class SubstringComparisons {
     public static void main(String[] args) {
@@ -9,7 +11,12 @@ public class SubstringComparisons {
         String s = scan.next();
         int k = scan.nextInt();
         scan.close();
-
+        /*
+        welcometojava
+        3
+        ava
+        wel
+         */
         System.out.println(getSmallestAndLargest(s, k));
     }
     // Lexicographical Order, also known as alphabetic or dictionary order, orders characters as follows:
@@ -26,9 +33,17 @@ public class SubstringComparisons {
             stringList.add(s.substring(i, i + k));
         }
         Collections.sort(stringList);
-        System.out.println(stringList);
+//        System.out.println(stringList); // [ava, com, elc, eto, jav, lco, met, oja, ome, toj, wel]
         smallest = stringList.get(0);
         largest = stringList.get(stringList.size() -1);
+
+        // java 8
+//        IntStream intStream = s.chars();
+//        Stream<Character> characterSteam = s.chars().mapToObj(c -> (char) c);
+        Stream<String> stringStream = s.codePoints().mapToObj(c -> String.valueOf((char) c));
+//        stringStream.forEach(System.out::println); // welcometojava
+        stringStream.map(p -> p.substring(0, k)).forEach(System.out::println);
+        //.iterate(0, i -> i + k).limit(s.length() - k);
 
         return smallest + "\n" + largest;
     }
