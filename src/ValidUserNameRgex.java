@@ -38,6 +38,7 @@ class UsernameValidator {
     /*
      * Write regular expression here.
      */
+    // Quantifiers of regex
     // ^ : Start of string, or start of line in multi-line pattern
     // [a-z] : Lower case letter from a to z
     // [A-Z] : Upper case letter from A to Z
