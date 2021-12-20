@@ -42,6 +42,7 @@ public class Regex {
 // 23.45.22.32.
 // I.Am.not.an.ip
 class MyRegex {
+    // ranges or regex
     // \\d         == [0-9]           : 0-9
     // \\d\\d      == [0-9][0-9]      : 10 - 99
     // (a|b) : a or b
